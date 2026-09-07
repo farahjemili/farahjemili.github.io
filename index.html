@@ -10,22 +10,507 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-      --paper:#F2F4F3;
-          --paper-raised:#E8ECEA;
-              --ink:#14202B;
-                  --ink-soft:#3D4A52;
-                      --accent:#24565A;
-                          --accent-light:#DCE8E7;
-                              --amber:#B98430;
-                                  --line:#D2D9D6;
-                                      --serif:'Source Serif 4', Georgia, serif;
-                                          --sans:'IBM Plex Sans', -apple-system, sans-serif;
-                                              --mono:'IBM Plex Mono', monospace;
-                                                  --maxw:1120px;
-                                                    }
-                                                      *{box-sizing:border-box;}
-                                                        html{scroll-behavior:smooth;}
-                                                          body{
-                                                              margin:0;
-                                                                  background:var(--paper);
-                                                                      color:var(--ink);
+    --paper:#F2F4F3;
+    --paper-raised:#E8ECEA;
+    --ink:#14202B;
+    --ink-soft:#3D4A52;
+    --accent:#24565A;
+    --accent-light:#DCE8E7;
+    --amber:#B98430;
+    --line:#D2D9D6;
+    --serif:'Source Serif 4', Georgia, serif;
+    --sans:'IBM Plex Sans', -apple-system, sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  header.hero{
+    position:relative;
+    background:var(--ink);
+    color:var(--paper);
+    overflow:hidden;
+    padding:76px 32px 64px;
+  }
+  .hero-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+  }
+  .hero-graph{
+    position:absolute;
+    top:0; right:0; bottom:0;
+    width:62%;
+    z-index:1;
+    opacity:0.55;
+  }
+  .hero-graph svg{width:100%; height:100%;}
+  .hero-eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.02em;
+    color:#8FB9BA;
+    margin:0 0 18px;
+  }
+  h1.name{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.4rem, 5.5vw, 3.6rem);
+    line-height:1.05;
+    margin:0 0 14px;
+    max-width:11ch;
+  }
+  .hero-role{
+    font-size:1.15rem;
+    color:#C7D6D4;
+    max-width:44ch;
+    margin:0 0 30px;
+  }
+  .hero-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 22px;
+    font-size:0.95rem;
+  }
+  .hero-links a{
+    color:var(--paper);
+    text-decoration:none;
+    border-bottom:1px solid #4A6567;
+    padding-bottom:2px;
+  }
+  .hero-links a:hover{border-color:var(--paper);}
+
+  .page{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:56px 32px 90px;
+    display:grid;
+    grid-template-columns:240px 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  aside.sidebar{
+    position:sticky;
+    top:32px;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+  }
+  .mark{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--accent);
+    color:var(--paper);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--serif);
+    font-size:1.4rem;
+    font-weight:600;
+  }
+  .fact-block h2{
+    font-size:0.78rem;
+    font-family:var(--mono);
+    color:var(--ink-soft);
+    margin:0 0 10px;
+    font-weight:500;
+  }
+  .fact-block p, .fact-block li{
+    margin:0 0 6px;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+  .fact-block ul{list-style:none; padding:0; margin:0;}
+  .fact-block a{text-decoration:none; border-bottom:1px solid var(--line);}
+  .fact-block a:hover{border-color:var(--accent);}
+
+  main{min-width:0;}
+  section{margin-bottom:64px;}
+  section:last-child{margin-bottom:0;}
+  h2.section-title{
+    font-family:var(--serif);
+    font-size:1.5rem;
+    font-weight:600;
+    margin:0 0 22px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  p.lede{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:62ch;
+  }
+
+  .timeline{border-left:2px solid var(--line); margin-left:4px;}
+  .tl-item{
+    position:relative;
+    padding:2px 0 30px 28px;
+  }
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:'';
+    position:absolute;
+    left:-7px; top:6px;
+    width:12px; height:12px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--accent);
+  }
+  .tl-item.current::before{background:var(--amber); border-color:var(--amber);}
+  .tl-date{
+    font-family:var(--mono);
+    font-size:0.82rem;
+    color:var(--accent);
+    display:block;
+    margin-bottom:4px;
+  }
+  .tl-item.current .tl-date{color:var(--amber);}
+  .tl-role{font-weight:600; margin:0 0 3px;}
+  .tl-org{color:var(--ink-soft); font-size:0.94rem; margin:0 0 6px;}
+  .tl-desc{color:var(--ink-soft); font-size:0.94rem; max-width:60ch; margin:0;}
+
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:28px;
+  }
+  .stat{
+    background:var(--paper);
+    padding:22px 18px;
+  }
+  .stat-num{
+    font-family:var(--mono);
+    font-size:1.7rem;
+    color:var(--accent);
+    display:block;
+  }
+  .stat-label{font-size:0.82rem; color:var(--ink-soft); margin-top:4px;}
+
+  .editorial-list{list-style:none; padding:0; margin:0; display:grid; gap:14px;}
+  .editorial-list li{
+    padding-left:18px;
+    border-left:2px solid var(--accent-light);
+    font-size:0.96rem;
+    color:var(--ink-soft);
+  }
+  .editorial-list strong{color:var(--ink); font-weight:600;}
+
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:36px;
+  }
+  .group h3{
+    font-family:var(--serif);
+    font-size:1.05rem;
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  .group ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:0.94rem;}
+  .group li{margin-bottom:6px;}
+
+  .tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
+  .tag{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    padding:5px 10px;
+    background:var(--accent-light);
+    color:var(--accent);
+    border-radius:3px;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:36px 32px;
+    max-width:var(--maxw);
+    margin:0 auto;
+    color:var(--ink-soft);
+    font-size:0.88rem;
+  }
+
+  @media (max-width:820px){
+    .page{grid-template-columns:1fr; gap:40px;}
+    aside.sidebar{position:static;}
+    .hero-graph{width:100%; opacity:0.25;}
+    .stats-row{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-graph" aria-hidden="true">
+    <svg viewBox="0 0 500 400" preserveAspectRatio="xMaxYMid slice">
+      <g stroke="#3E7C7C" stroke-width="1">
+        <line x1="60" y1="60" x2="180" y2="120"/>
+        <line x1="180" y1="120" x2="320" y2="70"/>
+        <line x1="180" y1="120" x2="150" y2="240"/>
+        <line x1="320" y1="70" x2="430" y2="150"/>
+        <line x1="150" y1="240" x2="280" y2="290"/>
+        <line x1="280" y1="290" x2="420" y2="260"/>
+        <line x1="150" y1="240" x2="60" y2="330"/>
+        <line x1="320" y1="70" x2="250" y2="180"/>
+        <line x1="250" y1="180" x2="150" y2="240"/>
+        <line x1="430" y1="150" x2="420" y2="260"/>
+      </g>
+      <g fill="#8FB9BA">
+        <circle cx="60" cy="60" r="4"/>
+        <circle cx="180" cy="120" r="5"/>
+        <circle cx="320" cy="70" r="4"/>
+        <circle cx="430" cy="150" r="4"/>
+        <circle cx="150" cy="240" r="6"/>
+        <circle cx="280" cy="290" r="4"/>
+        <circle cx="420" cy="260" r="4"/>
+        <circle cx="60" cy="330" r="4"/>
+        <circle cx="250" cy="180" r="4"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">ISITCom · University of Sousse · Tunisia</p>
+    <h1 class="name">Farah Jemili, PhD</h1>
+    <p class="hero-role">Associate Professor &amp; Senior Researcher working on intrusion detection, artificial intelligence, and distributed systems — supervising graduate research and serving on international editorial boards.</p>
+    <div class="hero-links">
+      <a href="mailto:Farah.jmili@isitc.u-sousse.tn">Farah.jmili@isitc.u-sousse.tn</a>
+      <a href="https://scholar.google.com/citations?user=eDZP7zcAAAAJ&hl=fr" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="https://www.linkedin.com/in/farah-jemili" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://orcid.org/0000-0001-7511-122" target="_blank" rel="noopener">ORCID</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="mark">FJ</div>
+
+    <div class="fact-block">
+      <h2>Affiliation</h2>
+      <p>Higher Institute of Computer Science and Telecom (ISITCom)<br>Hammam Sousse, 4011, Tunisia</p>
+    </div>
+
+    <div class="fact-block">
+      <h2>Current roles</h2>
+      <ul>
+        <li>Associate Professor, ISITCom</li>
+        <li>NVIDIA Instructor &amp; University Ambassador</li>
+        <li>Scientific Reference, ATEA</li>
+        <li>Internship Director, ISITCom</li>
+      </ul>
+    </div>
+
+    <div class="fact-block">
+      <h2>Research areas</h2>
+      <ul>
+        <li>Intrusion Detection</li>
+        <li>Artificial Intelligence</li>
+        <li>Big Data Analysis</li>
+        <li>Cloud &amp; Distributed Systems</li>
+        <li>Blockchain Technology</li>
+      </ul>
+    </div>
+
+    <div class="fact-block">
+      <h2>Languages</h2>
+      <p>Arabic · English · French · Spanish</p>
+    </div>
+  </aside>
+
+  <main>
+
+    <section id="about">
+      <h2 class="section-title">About</h2>
+      <p class="lede">Farah Jemili holds a PhD in Computer Sciences from the National School of Computer Sciences (ENSI), University of Manouba, and completed her Habilitation to Direct Research (HDR) there in 2024. Since 2011 she has been a Senior Researcher at ISITCom's Mars Research Lab, with earlier research at the Riadi Research Lab on multi-agent negotiation, intrusion detection and prediction, and reasoning under uncertainty. She has authored more than 30 peer-reviewed journal articles and 30+ conference papers, supervised over 25 master's theses and 5 PhD dissertations, and reviewed roughly 200 submissions for journals including <em>Computer Science Review</em>, <em>Artificial Intelligence Review</em>, <em>Ad Hoc Networks</em>, and <em>Computers &amp; Security</em>.</p>
+    </section>
+
+    <section id="impact">
+      <h2 class="section-title">Publications &amp; impact</h2>
+      <div class="stats-row">
+        <div class="stat"><span class="stat-num">78</span><span class="stat-label">Publications</span></div>
+        <div class="stat"><span class="stat-num">908</span><span class="stat-label">Citations</span></div>
+        <div class="stat"><span class="stat-num">19</span><span class="stat-label">h-index</span></div>
+        <div class="stat"><span class="stat-num">27</span><span class="stat-label">i10-index</span></div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:-16px;">Figures via <a href="https://scholar.google.com/citations?user=eDZP7zcAAAAJ&hl=fr" target="_blank" rel="noopener">Google Scholar</a>.</p>
+      <ul class="editorial-list">
+        <li><strong>Associate Editor</strong> — Intelligent Decision Technologies (Q3, IF 1.0, SCI)</li>
+        <li><strong>Associate Editor</strong> — Journal of King Saud University: Computer and Information Sciences (Q1, IF 6.1, SCI)</li>
+        <li><strong>Best Reviewer of the Year, 2023</strong> — Computer Systems Science and Engineering (Q3, SCI)</li>
+      </ul>
+    </section>
+
+    <section id="experience">
+      <h2 class="section-title">Research experience</h2>
+      <div class="timeline">
+        <div class="tl-item current">
+          <span class="tl-date">Sep 2011 — present</span>
+          <p class="tl-role">Senior Researcher</p>
+          <p class="tl-org">Mars Research Lab, ISITCom, University of Sousse</p>
+          <p class="tl-desc">Intrusion detection, artificial intelligence, big data analysis, cloud computing, distributed systems, blockchain technology.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2002 — Sep 2011</span>
+          <p class="tl-role">Researcher</p>
+          <p class="tl-org">Riadi Research Lab, ENSI, University of Manouba</p>
+          <p class="tl-desc">E-commerce and multi-agent negotiation, IT security (intrusion detection &amp; prediction), machine learning, reasoning under uncertainty.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="roles">
+      <h2 class="section-title">Academic &amp; institutional roles</h2>
+      <div class="timeline">
+        <div class="tl-item current">
+          <span class="tl-date">Feb 2026 — present</span>
+          <p class="tl-role">NVIDIA Instructor &amp; University Ambassador</p>
+          <p class="tl-org">University of Sousse</p>
+        </div>
+        <div class="tl-item current">
+          <span class="tl-date">Jan 2025 — present</span>
+          <p class="tl-role">Associate Professor</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item current">
+          <span class="tl-date">Jul 2025 — present</span>
+          <p class="tl-role">Scientific Reference</p>
+          <p class="tl-org">Tunisian Agency for Evaluation and Accreditation of Higher Education (ATEA)</p>
+        </div>
+        <div class="tl-item current">
+          <span class="tl-date">Sep 2024 — present</span>
+          <p class="tl-role">Internship Director</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item current">
+          <span class="tl-date">Sep 2021 — present</span>
+          <p class="tl-role">Quality Committee Member</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2018 — present</span>
+          <p class="tl-role">PMO Member (Project Management Office)</p>
+          <p class="tl-org">University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2017 — Sep 2020</span>
+          <p class="tl-role">Head of the Department of Computer Science</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2014 — Sep 2017</span>
+          <p class="tl-role">Coordinator, Professional Master: Web Services &amp; Multimedia</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2011 — Sep 2014</span>
+          <p class="tl-role">Member, Scientific Council</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2004 — 2024</span>
+          <p class="tl-role">Assistant Professor</p>
+          <p class="tl-org">ISITCom, University of Sousse</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">Sep 2002 — Sep 2004</span>
+          <p class="tl-role">IT Manager</p>
+          <p class="tl-org">Fuba Printed Circuits Tunisie SA, Bizerte</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="teaching">
+      <h2 class="section-title">Teaching &amp; supervision</h2>
+      <div class="grid-2">
+        <div class="group">
+          <h3>Courses taught</h3>
+          <ul>
+            <li>Licence: Web development tools, algorithmics &amp; programming, data structures, UML</li>
+            <li>Engineer: Information systems, AI, advanced AI (LLM architectures, agentic systems, tool calling), deep learning (PyTorch, transformers, multi-agent pipelines), LLM tooling (LangChain, LangGraph, FastAPI, Groq)</li>
+            <li>Master: Human-machine interface, distributed information systems, advanced algorithms, AI, deep learning</li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Current supervision</h3>
+          <ul>
+            <li>[Master] LLM-augmented multi-agent security monitoring with LangGraph</li>
+            <li>[Master] Agentic routing for intelligent IoT intrusion detection using LangChain</li>
+            <li>[PhD] Intrusion detection system based on agentic AI and blockchain technology</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="service">
+      <h2 class="section-title">Conference &amp; special-session service</h2>
+      <ul class="editorial-list">
+        <li>Co-Chair, Special Session — SoCPaR 2022 (MIR Labs, USA)</li>
+        <li>Co-Chair, Special Sessions — IEEE AMCAI 2023</li>
+        <li>Co-Organizer, AI for Cyber Defense special session — IEEE AMCAI 2023 (Best Session Award)</li>
+        <li>Co-Chair, Workshop on Digital Health (HOPE'24) — alongside IEEE AICCSA 2024</li>
+        <li>Co-Chair, Special Sessions — IEEE AMCAI 2025</li>
+      </ul>
+    </section>
+
+    <section id="international">
+      <h2 class="section-title">International engagement</h2>
+      <div class="grid-2">
+        <div class="group">
+          <h3>Invited talks (selected)</h3>
+          <ul>
+            <li>SciWide Webinars — Applied Science, Engineering &amp; Technology (2023, 2025)</li>
+            <li>V-Robot 2024 — Robotics and Artificial Intelligence</li>
+            <li>World Data Congress 2023</li>
+            <li>Women's Network Lecture Series — TU Dresden, Germany (2022)</li>
+            <li>IBM Client Innovation Center, Canada (2021)</li>
+            <li>Meetings International, Singapore — AI &amp; Robotics (2022)</li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Research projects</h3>
+          <ul>
+            <li>ERASMUS+ Uptakers — Upgrading Academic Skills via Hybrid Studios</li>
+            <li>ERASMUS+ RANK_U — Excellence &amp; Recognition of Universities</li>
+            <li>ERASMUS+ DEEPALL — Design &amp; Engineering Projects for All</li>
+            <li>H2020-WAFS DIDON — Open Science Hub for Doctoral Skills</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="certifications">
+      <h2 class="section-title">Certifications</h2>
+      <div class="tag-row">
+        <span class="tag">Fundamentals of Deep Learning — 2026</span>
+        <span class="tag">ISO 21001 Lead Auditor — 2023</span>
+        <span class="tag">ISO 21001 Foundation — 2022</span>
+        <span class="tag">Erasmus+ CBHE / ISO 21500 PM — 2019</span>
+        <span class="tag">Horizon 2020 Program Training — 2019</span>
+        <span class="tag">Marie Skłodowska-Curie Training — 2019</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Farah Jemili, PhD — ISITCom, University of Sousse, Tunisia. Contact: <a href="mailto:Farah.jmili@isitc.u-sousse.tn">Farah.jmili@isitc.u-sousse.tn</a>
+</footer>
+
+</body>
+</html>
